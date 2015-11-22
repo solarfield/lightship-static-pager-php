@@ -45,7 +45,7 @@ class ControllerPlugin extends \Solarfield\Lightship\Pager\PagerControllerPlugin
 			$indexFilePath = $pagesDirPath . '/index.php';
 			if (!file_exists($indexFilePath)) {
 				throw new Exception(
-					"Page index.json was not found at: '" . $pagesDirPath . "/index.json'."
+					"'$pagesDirPath/index.json' was not found."
 				);
 			}
 

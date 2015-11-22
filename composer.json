@@ -1,0 +1,13 @@
+{
+	"name": "solarfield/lightship-static-pager-php",
+
+	"autoload": {
+		"psr-4": {
+			"Solarfield\\Lightship\\StaticPager\\": "src/Solarfield/Lightship/StaticPager"
+		}
+	},
+
+	"require": {
+		"solarfield/lightship-pager-php": "dev-master"
+	}
+}

@@ -3,7 +3,7 @@ namespace Solarfield\Lightship\StaticPager\Plugins\StaticPager;
 
 use Exception;
 use App\Environment as Env;
-use Ok\StructUtils;
+use Solarfield\Ok\StructUtils;
 
 class ControllerPlugin extends \Solarfield\Lightship\Pager\PagerControllerPlugin {
 	protected function getPagesDirectoryFilePath() {

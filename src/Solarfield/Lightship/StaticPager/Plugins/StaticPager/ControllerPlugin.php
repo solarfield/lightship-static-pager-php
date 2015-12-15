@@ -6,10 +6,13 @@ use App\Environment as Env;
 use Solarfield\Ok\StructUtils;
 
 class ControllerPlugin extends \Solarfield\Lightship\Pager\PagerControllerPlugin {
-	protected function getPagesDirectoryFilePath() {
-		static $path;
+	private $pagesDirFilePath;
+	private $pagesList;
+	private $fullPage;
+	private $fullPageCacheKey;
 
-		if ($path === null) {
+	protected function getPagesDirectoryFilePath() {
+		if ($this->pagesDirFilePath === null) {
 			$value = $this->getOptions()->get('pagesDirectoryFilePath');
 
 			if (!$value) {
@@ -18,28 +21,26 @@ class ControllerPlugin extends \Solarfield\Lightship\Pager\PagerControllerPlugin
 				);
 			}
 
-			$path = realpath($value);
+			$this->pagesDirFilePath = realpath($value);
 
-			if (!$path) {
+			if (!$this->pagesDirFilePath) {
 				throw new Exception(
 					"'$value' does not exist."
 				);
 			}
 
-			if (!is_dir($path)) {
+			if (!is_dir($this->pagesDirFilePath)) {
 				throw new Exception(
-					"'$path' is not a directory."
+					"'{$this->pagesDirFilePath}' is not a directory."
 				);
 			}
 		}
 
-		return $path;
+		return $this->pagesDirFilePath;
 	}
 
 	public function getPagesList() {
-		static $pages;
-
-		if ($pages === null) {
+		if ($this->pagesList === null) {
 			$pagesDirPath = $this->getPagesDirectoryFilePath();
 
 			$indexFilePath = $pagesDirPath . '/index.php';
@@ -52,17 +53,19 @@ class ControllerPlugin extends \Solarfield\Lightship\Pager\PagerControllerPlugin
 			/** @noinspection PhpIncludeInspection */
 			$index = include($indexFilePath);
 
-			$pages = $index['pages'];
+			$this->pagesList = $index['pages'];
 		}
 
-		return $pages;
+		return $this->pagesList;
 	}
 
 	public function getFullPage($aCode) {
-		static $page;
-		static $cacheCode = false;
+		$currentKey = $aCode;
 
-		if ($aCode !== $cacheCode) {
+		if ($currentKey !== $this->fullPageCacheKey) {
+			$this->fullPage = null;
+			$this->fullPageCacheKey = $currentKey;
+
 			$pagesDirPath = $this->getPagesDirectoryFilePath();
 
 			if (preg_match('/^[a-z\-]+$/', $aCode) !== 1) {
@@ -71,18 +74,18 @@ class ControllerPlugin extends \Solarfield\Lightship\Pager\PagerControllerPlugin
 				);
 			}
 
-			$page = $this->getPagesMap()['lookup'][$aCode];
+			$this->fullPage = $this->getPagesMap()['lookup'][$aCode];
 
 			$indexFilePath = $pagesDirPath . '/pages/' . $aCode . '/details.php';
 			if (file_exists($indexFilePath)) {
 				/** @noinspection PhpIncludeInspection */
 				$details = include($indexFilePath);
 
-				$page = StructUtils::merge($page, $details['page']);
+				$this->fullPage = StructUtils::merge($this->fullPage, $details['page']);
 			}
 		}
 
-		return $page;
+		return $this->fullPage;
 	}
 
 	public function handleResolveOptions() {

@@ -89,9 +89,9 @@ class ControllerPlugin extends \Solarfield\Lightship\Pager\PagerControllerPlugin
 	}
 
 	public function handleResolveOptions() {
-		$options = $this->getController()->getOptions();
+		$options = $this->getOptions();
 
-		$options->add($this->getInstallationCode() . '.pagesDirectoryFilePath', Env::getVars()->get('projectPackageFilePath') . '/files/static-pager');
+		$options->add('pagesDirectoryFilePath', Env::getVars()->get('projectPackageFilePath') . '/files/static-pager');
 	}
 
 	public function __construct(\Solarfield\Batten\ControllerInterface $aController, $aComponentCode, $aInstallationCode) {

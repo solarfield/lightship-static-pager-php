@@ -97,6 +97,6 @@ class ControllerPlugin extends \Solarfield\Lightship\Pager\PagerControllerPlugin
 	public function __construct(\Solarfield\Batten\ControllerInterface $aController, $aComponentCode, $aInstallationCode) {
 		parent::__construct($aController, $aComponentCode, $aInstallationCode);
 
-		$this->getController()->addEventListener('app-resolve-options', [$this, 'handleResolveOptions']);
+		$this->getController()->addEventListener('resolve-options', [$this, 'handleResolveOptions']);
 	}
 }

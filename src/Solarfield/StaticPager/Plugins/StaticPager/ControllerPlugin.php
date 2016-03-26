@@ -1,11 +1,11 @@
 <?php
-namespace Solarfield\Lightship\StaticPager\Plugins\StaticPager;
+namespace Solarfield\StaticPager\Plugins\StaticPager;
 
 use Exception;
 use App\Environment as Env;
 use Solarfield\Ok\StructUtils;
 
-class ControllerPlugin extends \Solarfield\Lightship\Pager\PagerControllerPlugin {
+class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 	private $pagesDirFilePath;
 	private $pagesList;
 	private $fullPage;

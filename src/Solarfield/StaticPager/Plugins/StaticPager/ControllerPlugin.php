@@ -68,7 +68,7 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 
 			$pagesDirPath = $this->getPagesDirectoryFilePath();
 
-			if (preg_match('/^[a-z\-]+$/', $aCode) !== 1) {
+			if (preg_match('/^[a-z\-_]+$/i', $aCode) !== 1) {
 				throw new Exception(
 					"Invalid page code: '" . $aCode . "'."
 				);

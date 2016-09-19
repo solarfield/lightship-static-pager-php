@@ -13,11 +13,11 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 
 	protected function getPagesDirectoryFilePath() {
 		if ($this->pagesDirFilePath === null) {
-			$value = $this->getOptions()->get('pagesDirectoryFilePath');
+			$value = $this->getController()->getOptions()->get('pagerPlugin.pagesDirectoryFilePath');
 
 			if (!$value) {
 				throw new Exception(
-					"The '" . $this->getInstallationCode() . ".pagesDirectoryFilePath' option is required."
+					"The 'pagerPlugin.pagesDirectoryFilePath' option is required."
 				);
 			}
 
@@ -89,13 +89,13 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 	}
 
 	public function handleResolveOptions() {
-		$options = $this->getOptions();
+		$options = $this->getController()->getOptions();
 
-		$options->add('pagesDirectoryFilePath', Env::getVars()->get('projectPackageFilePath') . '/libs/static-pager');
+		$options->add('pagerPlugin.pagesDirectoryFilePath', Env::getVars()->get('projectPackageFilePath') . '/libs/static-pager');
 	}
 
-	public function __construct(\Solarfield\Batten\ControllerInterface $aController, $aComponentCode, $aInstallationCode) {
-		parent::__construct($aController, $aComponentCode, $aInstallationCode);
+	public function __construct(\Solarfield\Batten\ControllerInterface $aController, $aComponentCode) {
+		parent::__construct($aController, $aComponentCode);
 
 		$this->getController()->addEventListener('resolve-options', [$this, 'handleResolveOptions']);
 	}

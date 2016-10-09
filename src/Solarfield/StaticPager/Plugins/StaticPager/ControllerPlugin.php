@@ -7,9 +7,6 @@ use Solarfield\Ok\StructUtils;
 
 class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 	private $pagesDirFilePath;
-	private $pagesList;
-	private $fullPage;
-	private $fullPageCacheKey;
 
 	protected function getPagesDirectoryFilePath() {
 		if ($this->pagesDirFilePath === null) {
@@ -40,52 +37,44 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 	}
 
 	protected function loadStubPages() {
-		if ($this->pagesList === null) {
-			$pagesDirPath = $this->getPagesDirectoryFilePath();
+		$pagesDirPath = $this->getPagesDirectoryFilePath();
 
-			$indexFilePath = $pagesDirPath . '/index.php';
-			if (!file_exists($indexFilePath)) {
-				throw new Exception(
-					"'$pagesDirPath/index.php' was not found."
-				);
-			}
+		$indexFilePath = $pagesDirPath . '/index.php';
 
-			/** @noinspection PhpIncludeInspection */
-			$index = include($indexFilePath);
-
-			$this->pagesList = $index['pages'];
+		if (!file_exists($indexFilePath)) {
+			throw new Exception(
+				"'$pagesDirPath/index.php' was not found."
+			);
 		}
 
-		return $this->pagesList;
+		/** @noinspection PhpIncludeInspection */
+		$index = include($indexFilePath);
+
+		return $index['pages'];
 	}
 
 	protected function loadFullPage($aCode) {
-		$currentKey = $aCode;
+		$fullPage = null;
 
-		if ($currentKey !== $this->fullPageCacheKey) {
-			$this->fullPage = null;
-			$this->fullPageCacheKey = $currentKey;
+		$pagesDirPath = $this->getPagesDirectoryFilePath();
 
-			$pagesDirPath = $this->getPagesDirectoryFilePath();
-
-			if (preg_match('/^[a-z\-_]+$/i', $aCode) !== 1) {
-				throw new Exception(
-					"Invalid page code: '" . $aCode . "'."
-				);
-			}
-
-			$this->fullPage = $this->getStubPage($aCode);
-
-			$indexFilePath = $pagesDirPath . '/pages/' . $aCode . '/details.php';
-			if (file_exists($indexFilePath)) {
-				/** @noinspection PhpIncludeInspection */
-				$details = include($indexFilePath);
-
-				$this->fullPage = StructUtils::merge($this->fullPage, $details['page']);
-			}
+		if (preg_match('/^[a-z\-_]+$/i', $aCode) !== 1) {
+			throw new Exception(
+				"Invalid page code: '" . $aCode . "'."
+			);
 		}
 
-		return $this->fullPage;
+		$fullPage = $this->getStubPage($aCode);
+
+		$indexFilePath = $pagesDirPath . '/pages/' . $aCode . '/details.php';
+		if (file_exists($indexFilePath)) {
+			/** @noinspection PhpIncludeInspection */
+			$details = include($indexFilePath);
+
+			$fullPage = StructUtils::merge($fullPage, $details['page']);
+		}
+
+		return $fullPage;
 	}
 
 	public function handleResolveOptions() {

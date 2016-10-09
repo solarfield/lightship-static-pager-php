@@ -47,8 +47,7 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 			);
 		}
 
-		/** @noinspection PhpIncludeInspection */
-		$index = include($indexFilePath);
+		$index = (function () use ($indexFilePath) {return require($indexFilePath);})();
 
 		return $index['pages'];
 	}
@@ -68,8 +67,7 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 
 		$indexFilePath = $pagesDirPath . '/pages/' . $aCode . '/details.php';
 		if (file_exists($indexFilePath)) {
-			/** @noinspection PhpIncludeInspection */
-			$details = include($indexFilePath);
+			$details = (function () use ($indexFilePath) {return require($indexFilePath);})();
 
 			$fullPage = StructUtils::merge($fullPage, $details['page']);
 		}

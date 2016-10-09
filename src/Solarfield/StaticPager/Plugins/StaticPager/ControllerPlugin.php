@@ -76,7 +76,6 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 
 			$this->fullPage = $this->getStubPage($aCode);
 
-			if ($this->fullPage)
 			$indexFilePath = $pagesDirPath . '/pages/' . $aCode . '/details.php';
 			if (file_exists($indexFilePath)) {
 				/** @noinspection PhpIncludeInspection */

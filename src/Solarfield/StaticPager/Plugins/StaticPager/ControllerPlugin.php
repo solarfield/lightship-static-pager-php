@@ -39,7 +39,7 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 		return $this->pagesDirFilePath;
 	}
 
-	public function getPagesList() {
+	protected function loadStubPages() {
 		if ($this->pagesList === null) {
 			$pagesDirPath = $this->getPagesDirectoryFilePath();
 
@@ -59,7 +59,7 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 		return $this->pagesList;
 	}
 
-	public function getFullPage($aCode) {
+	protected function loadFullPage($aCode) {
 		$currentKey = $aCode;
 
 		if ($currentKey !== $this->fullPageCacheKey) {
@@ -74,8 +74,9 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 				);
 			}
 
-			$this->fullPage = $this->getPagesMap()['lookup'][$aCode];
+			$this->fullPage = $this->getStubPage($aCode);
 
+			if ($this->fullPage)
 			$indexFilePath = $pagesDirPath . '/pages/' . $aCode . '/details.php';
 			if (file_exists($indexFilePath)) {
 				/** @noinspection PhpIncludeInspection */

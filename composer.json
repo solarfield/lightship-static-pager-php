@@ -8,6 +8,6 @@
 	},
 
 	"require": {
-		"solarfield/lightship-pager-php": "dev-master"
+		"solarfield/lightship-pager-php": "^0.1"
 	}
 }

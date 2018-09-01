@@ -2,7 +2,6 @@
 namespace Solarfield\StaticPager\Plugins\StaticPager;
 
 use Exception;
-use App\Environment as Env;
 use Solarfield\Ok\StructUtils;
 
 class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
@@ -78,7 +77,7 @@ class ControllerPlugin extends \Solarfield\Pager\PagerControllerPlugin {
 	public function handleResolveOptions() {
 		$options = $this->getController()->getOptions();
 
-		$options->add('pagerPlugin.pagesDirectoryFilePath', Env::getVars()->get('projectPackageFilePath') . '/libs/static-pager');
+		$options->add('pagerPlugin.pagesDirectoryFilePath', $this->getController()->getEnvironment()->getVars()->get('projectPackageFilePath') . '/libs/static-pager');
 	}
 
 	public function __construct(\Solarfield\Lightship\ControllerInterface $aController, $aComponentCode) {
